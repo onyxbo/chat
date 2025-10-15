@@ -37,36 +37,31 @@
         <button id="send">Send</button>
     </div>
 
-        <script>
-        const socket = io({ transports: ['websocket'] });
-        const input = document.getElementById('input');
-        const sendBtn = document.getElementById('send');
-        const messages = document.getElementById('messages');
+<script>
+    const socket = io({ transports: ['websocket'] });
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    const messages = document.getElementById('messages');
 
-        function sendMessage() {
-            if (input.value.trim() !== '') {
-                socket.send(input.value);
-                input.value = '';
-            }
+    sendBtn.onclick = sendMessage;
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    function sendMessage() {
+        const text = input.value.trim();
+        if (text) {
+            socket.send(text);
+            input.value = '';
         }
+    }
 
-        sendBtn.onclick = sendMessage;
-
-        // Press Enter to send
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();  // prevent new line
-                sendMessage();
-            }
-        });
-
-        socket.on('message', msg => {
-            const div = document.createElement('div');
-            div.textContent = msg;
-            messages.appendChild(div);
-            messages.scrollTop = messages.scrollHeight;
-        });
-    </script>
+    socket.on('message', msg => {
+        const div = document.createElement('div');
+        div.textContent = msg;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+    });
+</script>
 </body>
 </html>
-
