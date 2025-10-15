@@ -1,9 +1,10 @@
+import eventlet
+eventlet.monkey_patch()  # MUST be first
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send
 import os
-import eventlet
 
-eventlet.monkey_patch()  # VERY important
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret123'
@@ -21,4 +22,5 @@ def handle_message(msg):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     socketio.run(app, host='0.0.0.0', port=port)
+
 
